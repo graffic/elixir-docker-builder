@@ -8,7 +8,7 @@ RUN apt-get update && \
     apt install -y curl autoconf gcc make unixodbc-dev ncurses-dev libssl-dev && \
     # Download, build and install Erlang
     curl -LO https://github.com/erlang/otp/archive/OTP-${ERLANG_VER}.tar.gz && \
-    tar xzvf OTP-${ERLANG_VER}.tar.gz && \
+    tar xzf OTP-${ERLANG_VER}.tar.gz && \
     cd otp-OTP-${ERLANG_VER} && \
     ./otp_build autoconf && \
     ./configure \
@@ -29,10 +29,11 @@ RUN apt-get update && \
         # et depends on wx
         --without-et && \
     make clean && make && make install && \
+    cd .. && \
     rm -rf otp-OTP-${ERLANG_VER} && \
     # Download, build and install Elixir
     curl -Lo elixir-${ELIXIR_VER}.tar.gz https://github.com/elixir-lang/elixir/archive/v${ELIXIR_VER}.tar.gz && \
-    tar xzvf elixir-${ELIXIR_VER}.tar.gz && \
+    tar xzf elixir-${ELIXIR_VER}.tar.gz && \
     cd elixir-${ELIXIR_VER} && \
     make && \
     make PREFIX=/usr install && \
