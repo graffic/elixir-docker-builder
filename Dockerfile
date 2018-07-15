@@ -28,7 +28,7 @@ RUN apt-get update && \
         --without-debugger \
         # et depends on wx
         --without-et && \
-    make clean install && \
+    make clean && make && make install && \
     rm -rf otp-OTP-${ERLANG_VER} && \
     # Download, build and install Elixir
     curl -Lo elixir-${ELIXIR_VER}.tar.gz https://github.com/elixir-lang/elixir/archive/v${ELIXIR_VER}.tar.gz && \
