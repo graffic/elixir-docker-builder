@@ -30,7 +30,7 @@ RUN apt-get update && \
         --without-et && \
     make clean && make && make install && \
     cd .. && \
-    rm -rf otp-OTP-${ERLANG_VER} && \
+    rm -rf otp-OTP-${ERLANG_VER} OTP-${ERLANG_VER}.tar.gz && \
     # Download, build and install Elixir
     curl -Lo elixir-${ELIXIR_VER}.tar.gz https://github.com/elixir-lang/elixir/archive/v${ELIXIR_VER}.tar.gz && \
     tar xzf elixir-${ELIXIR_VER}.tar.gz && \
@@ -38,4 +38,4 @@ RUN apt-get update && \
     make && \
     make PREFIX=/usr install && \
     cd .. && \
-    rm -rf elixir-${ELIXIR_VER}
+    rm -rf elixir-${ELIXIR_VER} elixir-${ELIXIR_VER}.tar.gz

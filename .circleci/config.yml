@@ -25,5 +25,8 @@ jobs:
           name: Build using the builder image
           command: |
             docker build -t graffic/elixir-ubuntu-armv7:latest .
-            docker login -u $DOCKER_USER -p $DOCKER_PASS         # (5)
+      - run:
+          name: Push to Docker Hub
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
             docker push graffic/elixir-ubuntu-armv7:latest
