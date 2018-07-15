@@ -38,4 +38,6 @@ RUN apt-get update && \
     make && \
     make PREFIX=/usr install && \
     cd .. && \
-    rm -rf elixir-${ELIXIR_VER} elixir-${ELIXIR_VER}.tar.gz
+    rm -rf elixir-${ELIXIR_VER} elixir-${ELIXIR_VER}.tar.gz && \
+    # Remove qemu-arm
+    rm -f /usr/bin/qemu-arm-static

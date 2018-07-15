@@ -22,7 +22,7 @@ jobs:
           name: Register binfmt
           command: docker run --rm --privileged multiarch/qemu-user-static:register -c yes
       - run:
-          name: Build using the builder image
+          name: Build the docker image
           command: |
             docker build -t graffic/elixir-ubuntu-armv7:latest .
       - run:
