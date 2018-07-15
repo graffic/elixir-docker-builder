@@ -1,0 +1,29 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: docker:stable
+    steps:
+      - setup_remote_docker:
+          version: 17.11.0-ce
+      - checkout
+      - run:
+          name: Wrap with qemu the arm32v7/ubuntu:bionic 
+          command: |
+            # Steal (sorry) qemu from altlinux
+            apk add --no-cache rpm
+            cd qemu-wrapper
+            wget http://ftp.altlinux.org/pub/distributions/ALTLinux/Sisyphus/x86_64/RPMS.classic/qemu-user-static-2.12.0-alt2.x86_64.rpm
+            rpm2cpio qemu-user-static-2.12.0-alt2.x86_64.rpm | cpio -idmv '*qemu-arm.static'
+            # Override the tagged image with the new one
+            docker build -t arm32v7/ubuntu:bionic .
+            cd ..
+      - run:
+          name: Register binfmt
+          command: docker run --rm --privileged multiarch/qemu-user-static:register -c yes
+      - run:
+          name: Build using the builder image
+          command: |
+            docker build -t graffic/elixir-ubuntu-armv7:latest .
+            docker login -u $DOCKER_USER -p $DOCKER_PASS         # (5)
+            docker push graffic/elixir-ubuntu-armv7:latest
