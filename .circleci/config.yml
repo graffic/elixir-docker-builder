@@ -13,8 +13,8 @@ jobs:
             # Steal (sorry) qemu from altlinux
             apk add --no-cache rpm
             cd qemu-wrapper
-            wget http://ftp.altlinux.org/pub/distributions/ALTLinux/Sisyphus/x86_64/RPMS.classic/qemu-user-static-2.12.0-alt2.x86_64.rpm
-            rpm2cpio qemu-user-static-2.12.0-alt2.x86_64.rpm | cpio -idmv '*qemu-arm.static'
+            wget https://github.com/multiarch/qemu-user-static/releases/download/v2.12.0/qemu-arm-static.tar.gz
+            tar xzf qemu-arm-static.tar.gz
             # Override the tagged image with the new one
             docker build -t arm32v7/ubuntu:bionic .
             cd ..
