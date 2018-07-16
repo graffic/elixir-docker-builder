@@ -11,7 +11,7 @@ jobs:
           name: Wrap with qemu the arm64v8/ubuntu:bionic
           command: |
             # Steal (sorry) qemu from altlinux
-            apk add --no-cache rpm
+            apk add --no-cache curl
             cd qemu-wrapper
             curl -LO https://github.com/multiarch/qemu-user-static/releases/download/v2.12.0/qemu-aarch64-static.tar.gz
             tar xzf qemu-aarch64-static.tar.gz
@@ -24,7 +24,7 @@ jobs:
       - run:
           name: Build the docker image
           command: |
-            docker build --pull -t graffic/elixir:ubuntu-arm64v8
+            docker build -t graffic/elixir:ubuntu-arm64v8 .
       - run:
           name: Push to Docker Hub
           command: |
