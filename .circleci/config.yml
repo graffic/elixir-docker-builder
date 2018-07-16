@@ -10,13 +10,12 @@ jobs:
       - run:
           name: Wrap with qemu the arm64v8/ubuntu:bionic
           command: |
-            # Steal (sorry) qemu from altlinux
             apk add --no-cache curl
             cd qemu-wrapper
             curl -LO https://github.com/multiarch/qemu-user-static/releases/download/v2.12.0/qemu-aarch64-static.tar.gz
             tar xzf qemu-aarch64-static.tar.gz
             # Override the tagged image with the new one
-            docker build -t arm64v8/ubuntu:bionic .
+            docker build --pull -t arm64v8/ubuntu:bionic .
             rm -f qemu-aarch64-static*
       - run:
           name: Register binfmt
