@@ -1,9 +1,8 @@
-FROM arm64v8/ubuntu:bionic
-#FROM ubuntu:bionic
-ENV LANG=C.UTF-8 \
-    ERLANG_VER=21.0.3 \
-    ELIXIR_VER=1.6.6
-    
+FROM %%BASE_IMAGE%%
+ARG ERLANG_VER
+ARG ELIXIR_VER
+ENV LANG=C.UTF-8 
+
 RUN apt-get update && \
     apt install -y curl autoconf gcc make unixodbc-dev ncurses-dev libssl-dev && \
     # Download, build and install Erlang
@@ -16,6 +15,8 @@ RUN apt-get update && \
         --sysconfdir=/etc \
         --mandir=/usr/share/man \
         --localstatedir=/var \
+        # Megaco is rarely used and it is big
+        --without-megaco \
         # wx needs a GUI
         --without-wx \
         # observer depends on wx
@@ -39,5 +40,8 @@ RUN apt-get update && \
     make PREFIX=/usr install && \
     cd .. && \
     rm -rf elixir-${ELIXIR_VER} elixir-${ELIXIR_VER}.tar.gz && \
+    # Local tools
+    mix local.hex --force && \
+    mix local.rebar --force && \
     # Debian cleanup
     rm -rf /var/lib/apt/lists/*
