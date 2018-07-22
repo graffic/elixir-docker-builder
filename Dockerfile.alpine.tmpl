@@ -1,0 +1,12 @@
+FROM %%BASE_IMAGE%%
+ARG ERLANG_VER
+ARG ELIXIR_VER
+ENV LANG=C.UTF-8 
+
+COPY build.erlang.elixir.sh /
+RUN apk update &&\
+    apk upgrade &&\
+	apk add curl autoconf gcc musl-dev make unixodbc-dev ncurses-dev libressl-dev &&\
+    ./build.erlang.elixir.sh &&\
+    # Cleanup alpine
+    rm -rf /var/cache/apk/*

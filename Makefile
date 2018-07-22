@@ -1,4 +1,10 @@
-.PHONY: ubuntu-x86_64 ubuntu-arm64v8 build qemu-wrap build push clean
+.PHONY: ubuntu-x86_64 \
+		alpine-x86_64 \
+		normal-build \
+		ubuntu-arm64v8 \
+		alpine-arm64v8 \
+		wrapped-build \
+		build qemu-wrap build push clean
 
 ERLANG_VER := 21.0.3
 ELIXIR_VER :=  1.6.6
@@ -7,13 +13,28 @@ QEMU_STATIC_VERSION := 2.12.0
 ubuntu-x86_64: BASE_IMAGE := ubuntu:bionic
 ubuntu-x86_64: DISTRO := ubuntu
 ubuntu-x86_64: TAG := ubuntu-x86_64
-ubuntu-x86_64: build push
+ubuntu-x86_64: normal-build
+
+alpine-x86_64: BASE_IMAGE := alpine:latest
+alpine-x86_64: DISTRO := alpine
+alpine-x86_64: TAG := alpine-x86_64
+alpine-x86_64: normal-build
+
+normal-build: build push
 
 ubuntu-arm64v8: BASE_IMAGE := arm64v8/ubuntu:bionic
 ubuntu-arm64v8: DISTRO := ubuntu
 ubuntu-arm64v8: TAG := ubuntu-arm64v8
 ubuntu-arm64v8: QEMU_ARCH := aarch64
-ubuntu-arm64v8: qemu-wrap build push
+ubuntu-arm64v8: wrapped-build
+
+alpine-arm64v8: BASE_IMAGE := arm64v8/alpine:latest
+alpine-arm64v8: DISTRO := alpine
+alpine-arm64v8: TAG := alpine-arm64v8
+alpine-arm64v8: QEMU_ARCH := aarch64
+alpine-arm64v8: wrapped-build
+
+wrapped-build: qemu-wrap build push
 
 qemu-%-static.tar.gz:
 	curl -LO https://github.com/multiarch/qemu-user-static/releases/download/v$(QEMU_STATIC_VERSION)/$@
@@ -30,7 +51,8 @@ qemu-wrap:
 
 build: DOCKER_FILE := $(shell mktemp)
 build:
-	sed 's!%%BASE_IMAGE%%!$(BASE_IMAGE)!g' Dockerfile.$(DISTRO).tmpl > $(DOCKER_FILE)
+	sed -e 's!%%BASE_IMAGE%%!$(BASE_IMAGE)!g' \
+		Dockerfile.$(DISTRO).tmpl > $(DOCKER_FILE)
 	docker build \
 		--build-arg ERLANG_VER=$(ERLANG_VER) \
 		--build-arg ELIXIR_VER=$(ELIXIR_VER) \
@@ -39,5 +61,9 @@ build:
 	
 push:
 	docker push graffic/elixir:$(TAG)
+
+register:
+	docker run --rm --privileged multiarch/qemu-user-static:register -c yes
+
 clean:
 	rm -f qemu-*-static qemu-*-static.tar.gz
