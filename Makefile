@@ -58,6 +58,8 @@ build:
 	docker build \
 		--build-arg ERLANG_VER=$(ERLANG_VER) \
 		--build-arg ELIXIR_VER=$(ELIXIR_VER) \
+		--build-arg LABEL_VCS_REF=`git rev-parse --short HEAD` \
+		--build-arg LABEL_BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		-t graffic/elixir:$(TAG) \
 		-f $(DOCKER_FILE) .
 	
