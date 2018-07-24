@@ -4,11 +4,13 @@
 		ubuntu-arm64v8 \
 		alpine-arm64v8 \
 		wrapped-build \
-		build qemu-wrap build push clean
+		build-all build qemu-wrap build push register clean
 
 ERLANG_VER := 21.0.3
 ELIXIR_VER :=  1.6.6
 QEMU_STATIC_VERSION := 2.12.0
+
+build-all: register alpine-arm64v8 ubuntu-arm64v8 alpine-x86_64 ubuntu-x86_64
 
 ubuntu-x86_64: BASE_IMAGE := ubuntu:bionic
 ubuntu-x86_64: DISTRO := ubuntu
@@ -36,10 +38,10 @@ alpine-arm64v8: wrapped-build
 
 wrapped-build: qemu-wrap build push
 
-qemu-%-static.tar.gz:
+x86_64_qemu-%-static.tar.gz:
 	curl -LO https://github.com/multiarch/qemu-user-static/releases/download/v$(QEMU_STATIC_VERSION)/$@
 
-qemu-%-static: qemu-%-static.tar.gz
+qemu-%-static: x86_64_qemu-%-static.tar.gz
 	tar xzf $?
 
 qemu-wrap: DOCKER_FILE := $(shell mktemp)
