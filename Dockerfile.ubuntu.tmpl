@@ -1,0 +1,11 @@
+FROM %%BASE_IMAGE%%
+ARG ERLANG_VER
+ARG ELIXIR_VER
+ENV LANG=C.UTF-8 
+
+COPY build.erlang.elixir.sh /
+RUN apt-get update && \
+    apt install -y curl autoconf gcc make unixodbc-dev ncurses-dev libssl-dev && \
+    ./build.erlang.elixir.sh && \
+    # Debian cleanup
+    rm -rf /var/lib/apt/lists/*
