@@ -6,8 +6,8 @@
 		wrapped-build \
 		build-all build qemu-wrap build push register clean
 
-ERLANG_VER := 21.0.3
-ELIXIR_VER :=  1.6.6
+ERLANG_VER := 21.0.5
+ELIXIR_VER :=  1.7.2
 QEMU_STATIC_VERSION := 2.12.0
 
 build-all: register alpine-arm64v8 ubuntu-arm64v8 alpine-x86_64 ubuntu-x86_64
