@@ -8,20 +8,25 @@ defaults: &default_steps
     - run: apk add --no-cache make git curl
     - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
     - run: '[ -n "$REGISTER" ] && make register || true' 
-    - run: make $TARGET
+    - run: make $CIRCLE_JOB
 
 
 version: 2
 jobs:
   alpine-x86_64:
     <<: *default_steps
-    environment:
-      TARGET: alpine-x86_64
 
   alpine-arm64v8:
     <<: *default_steps
     environment:
-      TARGET: alpine-arm64v8
+      REGISTER: register
+
+  ubuntu-x86_64:
+    <<: *default_steps
+
+  ubuntu-arm64v8:
+    <<: *default_steps
+    environment:
       REGISTER: register
 
 workflows:

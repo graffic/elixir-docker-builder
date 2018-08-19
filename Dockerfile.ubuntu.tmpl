@@ -6,6 +6,7 @@ ARG LABEL_VCS_REF
 ENV LANG=C.UTF-8
 LABEL org.label-schema.build-date=$LABEL_BUILD_DATE \
       org.label-schema.vcs-ref=$LABEL_VCS_REF \
+      org.label-schema.version="otp-${ERLANG_VER}_elixir-${ELIXIR_VER}"  \
       org.label-schema.vcs-url="https://github.com/graffic/elixir-docker-builder" \
       org.label-schema.schema-version="1.0"
 
