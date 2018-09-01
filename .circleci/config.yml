@@ -35,4 +35,6 @@ workflows:
     jobs:
       - alpine-x86_64
       - alpine-arm64v8
+      - ubuntu-x86_64
+      - ubuntu-arm64v8
 
